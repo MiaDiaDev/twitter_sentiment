@@ -2,12 +2,12 @@ import sys, tweepy, csv, re
 from textblob import TextBlob
 
 
-class SentimentAnalysis:
+class TweetLoader:
     def __init__(self):
         self.tweets = []
         self.tweetText = []
 
-    def DownloadData(self):
+    def download_tweets(self):
         # authenticating
         consumerKey = "3gNr8ySpbERuZpVuvd7U9Y73p"
         consumerSecret = "PO2W76yFwMlPMt3eIllZjd4QFXsh0BQLx97YTCXkmVDIOx58gl"
@@ -38,23 +38,18 @@ class SentimentAnalysis:
             if i >= 50:
                 break
             # Append to temp so that we can store in csv later. I use encode UTF-8
-            self.tweetText.append(self.cleanTweet(tweet.text).encode("utf-8"))
-            # print (tweet.text.translate(non_bmp_map))    #print tweet's text
-            analysis = TextBlob(tweet.text)
+            self.tweetText.append(self.clean_tweet(tweet.text).encode("utf-8"))
+            # print (tweet.text.translate(non_bmp_map)) 
 
         # Write to csv and close csv file
         csvWriter.writerow(self.tweetText)
         csvFile.close()
 
-    def cleanTweet(self, tweet):
+    def clean_tweet(self, tweet):
         # Remove Links, Special Characters etc from tweet
-        return " ".join(
-            re.sub(
-                "(@[A-Za-z0-9]+)|([^0-9A-Za-z \t]) | (\w +:\ / \ / \S +)", " ", tweet
-            ).split()
-        )
+        return " ".join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
 
 
 if __name__ == "__main__":
-    sa = SentimentAnalysis()
-    sa.DownloadData()
+    sa = TweetLoader()
+    sa.download_tweets()
