@@ -3,3 +3,5 @@
 *.code-workspace
 
 .history
+
+__pycache__
