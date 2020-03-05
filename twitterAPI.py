@@ -25,16 +25,19 @@ class TwitterAPI:
         quantity_tweets = 5
 
         #
-        self.tweets = tweepy.Cursor(api.search, q=search_term, lang="en", tweet_mode="extended").items(quantity_tweets)
+        self.tweets = tweepy.Cursor(
+            api.search, q=search_term, lang="en", tweet_mode="extended"
+        ).items(quantity_tweets)
 
         sql = SQLData()
         for api_tweet in self.tweets:
-            tweet = Tweet(api_tweet.id, api_tweet.created_at, str(datetime.datetime.now()), str(datetime.datetime.now()), 
-                            api_tweet.user.screen_name, api_tweet.full_text)
+            tweet = Tweet(
+                api_tweet.id,
+                api_tweet.created_at,
+                str(datetime.datetime.now()),
+                str(datetime.datetime.now()),
+                api_tweet.user.screen_name,
+                api_tweet.full_text,
+            )
             sql.insert_tweet(tweet)
 
-            
-
-    def clean_tweet(self, tweet):
-        # Remove Links, Special Characters etc from tweet
-        return " ".join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())

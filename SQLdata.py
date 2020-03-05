@@ -11,7 +11,7 @@ class SQLData:
 
     def create_database(self):
         self.cursor.execute(
-        """CREATE TABLE Tweets(
+            """CREATE TABLE Tweets(
         ID INT PRIMARY KEY     NOT NULL,
         TWEET_DATE     TEXT    NOT NULL,
         IMPORT_DATE    TEXT    NOT NULL,
@@ -23,14 +23,16 @@ class SQLData:
         NB_POLARITY    INT
         );"""
         )
-    
+
     def insert_tweet(self, tweet):
-        #prüft, ob schon ein Tweet mit der selben ID vorhanden ist
+        # prüft, ob schon ein Tweet mit der selben ID vorhanden ist
         if self.get_tweet(tweet.id):
             print("Eintrag existiert bereits")
             return
-        #Werte in eine Zeile schreiben
-        self.cursor.execute(f"INSERT INTO Tweets VALUES ({tweet.api_id},'{tweet.tweet_date}','{tweet.import_date}','{tweet.update_date}','{tweet.user}','{tweet.text}','{tweet.label}',{tweet.tb_polarity},{tweet.nb_polarity})")
+        # Werte in eine Zeile schreiben
+        self.cursor.execute(
+            f"INSERT INTO Tweets VALUES ({tweet.api_id},'{tweet.tweet_date}','{tweet.import_date}','{tweet.update_date}','{tweet.user}','{tweet.text}','{tweet.label}',{tweet.tb_polarity},{tweet.nb_polarity})"
+        )
         self.connect.commit()
 
     def get_tweet(self, id):
@@ -48,15 +50,17 @@ class SQLData:
         return tweet
 
     def update_tweet(self, tweet):
-        #prüft, ob Eintrag bereits existiert
+        # prüft, ob Eintrag bereits existiert
         if not self.get_tweet(tweet.api_id):
             print("Eintrag existiert nicht")
             return
-        self.cursor.execute(f"UPDATE Tweets SET UPDATE_DATE='{datetime.datetime.now()}', TEXT='{tweet.text}', LABEL='{tweet.label}', TB_POLARITY={tweet.tb_polarity}, NB_POLARITY={tweet.nb_polarity} WHERE ID={tweet.api_id}")
+        self.cursor.execute(
+            f"UPDATE Tweets SET UPDATE_DATE='{datetime.datetime.now()}', TEXT='{tweet.text}', LABEL='{tweet.label}', TB_POLARITY={tweet.tb_polarity}, NB_POLARITY={tweet.nb_polarity} WHERE ID={tweet.api_id}"
+        )
         self.connect.commit()
-    
+
     def delete_tweet(self, id):
-        #prüft, ob Eintrag bereits existiert
+        # prüft, ob Eintrag bereits existiert
         if not self.get_tweet(id):
             print("Eintrag existiert nicht")
             return
@@ -64,7 +68,7 @@ class SQLData:
         self.connect.commit()
 
     def _cast_row_to_tweet(self, row):
-        tweet = Tweet(row[0],row[1],row[2],row[3],row[4],row[5])
+        tweet = Tweet(row[0], row[1], row[2], row[3], row[4], row[5])
         tweet.label = row[6]
         tweet.tb_polarity = row[7]
         tweet.nb_polarity = row[8]
