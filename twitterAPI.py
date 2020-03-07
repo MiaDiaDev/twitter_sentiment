@@ -22,22 +22,25 @@ class TwitterAPI:
 
         # auch andere Suchanfragen einbeziehen?
         search_term = "#ExtinctionRebellion"
-        quantity_tweets = 5
+        quantity_tweets = 500
 
         #
         self.tweets = tweepy.Cursor(
-            api.search, q=search_term, lang="en", tweet_mode="extended"
+            api.search, q=search_term, lang="en", tweet_mode="extended", result_type="popular"
         ).items(quantity_tweets)
 
         sql = SQLData()
         for api_tweet in self.tweets:
-            tweet = Tweet(
-                api_tweet.id,
-                api_tweet.created_at,
-                str(datetime.datetime.now()),
-                str(datetime.datetime.now()),
-                api_tweet.user.screen_name,
-                api_tweet.full_text,
-            )
-            sql.insert_tweet(tweet)
+            if not api_tweet.full_text.startswith("RT"):
+                tweet = Tweet(
+                    api_tweet.id,
+                    api_tweet.created_at,
+                    str(datetime.datetime.now()),
+                    str(datetime.datetime.now()),
+                    api_tweet.user.screen_name,
+                    api_tweet.full_text,
+                )
+                sql.insert_tweet(tweet)
+            else:
+                print (f"Tweet mit der ID={api_tweet.id} ist ein Retweet")
 

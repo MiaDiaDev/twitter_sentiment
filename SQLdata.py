@@ -26,28 +26,39 @@ class SQLData:
 
     def insert_tweet(self, tweet):
         # prüft, ob schon ein Tweet mit der selben ID vorhanden ist
-        if self.get_tweet(tweet.id):
+        if self._tweet_exists(tweet):
             print("Eintrag existiert bereits")
             return
         # Werte in eine Zeile schreiben
-        self.cursor.execute(
-            f"INSERT INTO Tweets VALUES ({tweet.api_id},'{tweet.tweet_date}','{tweet.import_date}','{tweet.update_date}','{tweet.user}','{tweet.text}','{tweet.label}',{tweet.tb_polarity},{tweet.nb_polarity})"
-        )
-        self.connect.commit()
+        try:
+            self.cursor.execute(f"INSERT INTO Tweets VALUES ({tweet.api_id},'{tweet.tweet_date}','{tweet.import_date}','{tweet.update_date}','{tweet.user}','{tweet.text}','{tweet.label}',{tweet.tb_polarity},{tweet.nb_polarity})")
+            self.connect.commit()
+        except:
+            print (f"Fehler bei Tweet mit der ID={tweet.api_id}")
+             
 
-    def get_tweet(self, id):
-        rows = self.cursor.execute(f"SELECT * FROM Tweets WHERE ID={id}")
+    def get_tweet(self, tweet):
+        if self._tweet_exists(tweet):
+            rows = self.cursor.execute(f"SELECT * FROM Tweets WHERE ID={tweet.api_id}")
+            results = []
+            for row in rows:
+                results.append(row)
+            row = results[0]
+            tweet = self._cast_row_to_tweet(row)
+            return tweet
+        else:
+            print ("Kein Tweet gefunden")
+
+    def _tweet_exists(self, tweet):
+        rows = self.cursor.execute(f"SELECT * FROM Tweets WHERE ID={tweet.api_id}")
         results = []
         for row in rows:
             results.append(row)
 
         if not results:
-            print(f"Keinen Tweet mit dieser ID={id} gefunden")
-            return None
-
-        row = results[0]
-        tweet = self._cast_row_to_tweet(row)
-        return tweet
+            return False
+        else:
+            return True
 
     def update_tweet(self, tweet):
         # prüft, ob Eintrag bereits existiert
