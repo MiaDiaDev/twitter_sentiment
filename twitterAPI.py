@@ -22,11 +22,11 @@ class TwitterAPI:
 
         # auch andere Suchanfragen einbeziehen?
         search_term = "#ExtinctionRebellion"
-        quantity_tweets = 500
+        quantity_tweets = 100
 
         #
         self.tweets = tweepy.Cursor(
-            api.search, q=search_term, lang="en", tweet_mode="extended", result_type="popular"
+            api.search, q=search_term, lang="en", tweet_mode="extended", include_entities=True
         ).items(quantity_tweets)
 
         sql = SQLData()
