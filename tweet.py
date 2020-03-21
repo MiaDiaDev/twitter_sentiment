@@ -6,6 +6,13 @@ class Tweet:
         self.update_date = update_date
         self.user = user
         self.text = text
-        self.label = ""
+        self._label = None
         self.tb_polarity = 0
         self.nb_polarity = 0
+
+    #def get_label(self):
+
+        #return self._label
+
+    #def set_label(self, label):
+

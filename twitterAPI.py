@@ -26,7 +26,7 @@ class TwitterAPI:
 
         #
         self.tweets = tweepy.Cursor(
-            api.search, q=search_term, lang="en", tweet_mode="extended", include_entities=True
+            api.search, q=search_term, lang="en", tweet_mode="extended"
         ).items(quantity_tweets)
 
         sql = SQLData()
