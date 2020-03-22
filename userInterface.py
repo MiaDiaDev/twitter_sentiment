@@ -36,4 +36,3 @@ class UserInterface:
         except:
             print("Fehler")
 
-    

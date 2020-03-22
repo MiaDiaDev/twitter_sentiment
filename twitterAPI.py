@@ -42,5 +42,4 @@ class TwitterAPI:
                 )
                 sql.insert_tweet(tweet)
             else:
-                print (f"Tweet mit der ID={api_tweet.id} ist ein Retweet")
-
+                print(f"Tweet mit der ID={api_tweet.id} ist ein Retweet")
