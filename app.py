@@ -3,6 +3,7 @@ from SQLdata import SQLData
 from userInterface import UserInterface
 from preprocessor import Preprocessor
 from textblobSentiment import TextblobSentiment
+from naiveBayesSentiment import NaiveBayesSentiment
 
 
 if __name__ == "__main__":
@@ -19,7 +20,10 @@ if __name__ == "__main__":
     # ui.greet_user()
 
     # pp = Preprocessor()
-    # pp.preprocessing_pipeline(1236304972578459649)
+    # pp.preprocessing_pipeline()
 
-    tb = TextblobSentiment()
-    tb.assign_tb_polarity(1236323325489696769)
+    # tb = TextblobSentiment()
+    # tb.assign_tb_polarity()
+
+    nb = NaiveBayesSentiment()
+    nb.assign_nb_polarity()

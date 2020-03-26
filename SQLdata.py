@@ -25,6 +25,14 @@ class SQLData:
         );"""
         )
 
+    def get_all_tweets(self):
+        rows = self.cursor.execute(f"SELECT * FROM Tweets")
+        results = []
+        for row in rows:
+            tweet = self._cast_row_to_tweet(row)
+            results.append(tweet)
+        return results
+
     def insert_tweet(self, tweet):
         # prüft, ob schon ein Tweet mit der selben ID vorhanden ist
         if self._tweet_exists(tweet.api_id):
@@ -44,10 +52,10 @@ class SQLData:
             rows = self.cursor.execute(f"SELECT * FROM Tweets WHERE ID={id}")
             results = []
             for row in rows:
-                results.append(row)
-            row = results[0]
-            tweet = self._cast_row_to_tweet(row)
-            return tweet
+                tweet = self._cast_row_to_tweet(row)
+                results.append(tweet)
+            return_tweet = results[0]
+            return return_tweet
         else:
             print("Kein Tweet gefunden")
 
