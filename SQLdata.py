@@ -9,6 +9,7 @@ class SQLData:
         self.connect = sqlite3.connect(database_name)
         self.cursor = self.connect.cursor()
 
+    # Erstellung der Datenbank, der Tweet-Tabelle und Definition der Spalten
     def create_database(self):
         self.cursor.execute(
             """CREATE TABLE Tweets(
@@ -25,6 +26,7 @@ class SQLData:
         );"""
         )
 
+    # alle Tweets aus der Datenbank laden
     def get_all_tweets(self):
         rows = self.cursor.execute(f"SELECT * FROM Tweets")
         results = []
@@ -33,6 +35,7 @@ class SQLData:
             results.append(tweet)
         return results
 
+    # einen Tweet in die Tabelle einfügen
     def insert_tweet(self, tweet):
         # prüft, ob schon ein Tweet mit der selben ID vorhanden ist
         if self._tweet_exists(tweet.api_id):
@@ -47,6 +50,7 @@ class SQLData:
         except:
             print(f"Fehler bei Tweet mit der ID={tweet.api_id}")
 
+    # einen Tweet anhand seiner ID erhalten
     def get_tweet(self, id):
         if self._tweet_exists(id):
             rows = self.cursor.execute(f"SELECT * FROM Tweets WHERE ID={id}")
@@ -59,6 +63,7 @@ class SQLData:
         else:
             print("Kein Tweet gefunden")
 
+    # Attribute eines Tweets ändern
     def update_tweet(self, tweet):
         # prüft, ob Eintrag bereits existiert
         if not self.get_tweet(tweet.api_id):
@@ -69,6 +74,7 @@ class SQLData:
         )
         self.connect.commit()
 
+    # einen Eintrag löschen
     def delete_tweet(self, id):
         # prüft, ob Eintrag bereits existiert
         if not self.get_tweet(id):
@@ -77,6 +83,7 @@ class SQLData:
         self.cursor.execute(f"DELETE FROM Tweets WHERE ID={id}")
         self.connect.commit()
 
+    # beim Labeln der Tweets den nächsten Kandidaten identifizieren
     def get_next_tweet_without_label(self):
         results = []
         for row in self.cursor.execute(
@@ -87,6 +94,7 @@ class SQLData:
         tweet = self._cast_row_to_tweet(row)
         return tweet
 
+    # überführt Datenbankzeile in Tweet-Objekt
     def _cast_row_to_tweet(self, row):
         tweet = Tweet(row[0], row[1], row[2], row[3], row[4], row[5])
         tweet.label = row[6]
@@ -95,6 +103,7 @@ class SQLData:
         tweet.nb_polarity = row[9]
         return tweet
 
+    # prüft, ob der Tweet mit einer bestimmten ID in der Datenbank existiert
     def _tweet_exists(self, id):
         rows = self.cursor.execute(f"SELECT * FROM Tweets WHERE ID={id}")
         results = []
