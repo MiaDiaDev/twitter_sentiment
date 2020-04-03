@@ -12,10 +12,10 @@ class TwitterAPI:
 
     def download_tweets(self):
         # Authentifikation bei der Twitter API
-        consumer_key = "3gNr8ySpbERuZpVuvd7U9Y73p"
-        consumer_secret = "PO2W76yFwMlPMt3eIllZjd4QFXsh0BQLx97YTCXkmVDIOx58gl"
-        access_token = "1201141846510067714-M68oypMwk2bqSQVILHRmlS5bFXnBrh"
-        access_token_secret = "Lo1iObuulmA7ESRZ89oXjoXqXafnUws1HOTkd1S2Vsd0a"
+        consumer_key = "***"
+        consumer_secret = "***"
+        access_token = "***"
+        access_token_secret = "***"
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
         auth.set_access_token(access_token, access_token_secret)
         api = tweepy.API(auth)
